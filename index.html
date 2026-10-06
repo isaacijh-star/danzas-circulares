@@ -241,32 +241,7 @@ dialog .btn.ghost{color:var(--ink)}
     <div class="actions">
       <a class="btn wa" id="waImg" href="https://api.whatsapp.com/send" target="_blank" rel="noopener">Invita tus amigas (os)</a>
       <button class="btn dark" id="howBtn" type="button">Cómo llegar</button>
-      <button class="btn ghost" id="copy" type="button">Copiar invitación</button>
     </div>
-    <p class="toast" id="toast" aria-live="polite"></p>
-    <details class="preview guide" id="guide">
-      <summary>Enviar con imagen, paso a paso</summary>
-      <div class="guide-body">
-        <img id="guideImg" src="miniatura.jpg" alt="Miniatura de la invitación a Danzas Circulares" width="1280" height="720">
-        <ol class="gsteps">
-          <li>
-            <p><b>Copia la imagen</b> y abre el chat en WhatsApp.</p>
-            <button class="btn dark sm" id="copyImg" type="button">1 · Copiar imagen</button>
-            <p class="hint" id="imgHint">También puedes hacer clic derecho sobre la imagen y elegir "Copiar imagen". En el celular, mantenla presionada y elige "Guardar imagen".</p>
-          </li>
-          <li><p>En el chat, presiona <b>Ctrl + V</b> (en el celular: 📎 → Galería → la imagen). <b>Todavía no envíes:</b> se abre la imagen con un espacio abajo que dice "Añade un comentario".</p></li>
-          <li>
-            <p><b>Copia el texto</b> y pégalo en ese espacio "Añade un comentario", debajo de la imagen. Recién ahí toca <b>Enviar</b>: llegará la imagen arriba y el texto abajo, en un solo mensaje.</p>
-            <button class="btn dark sm" id="copyTxt" type="button">2 · Copiar texto</button>
-          </li>
-        </ol>
-        <p class="toast" id="guideToast" aria-live="polite"></p>
-      </div>
-    </details>
-    <details class="preview">
-      <summary>Ver el mensaje que se enviará</summary>
-      <p id="msgPreview"></p>
-    </details>
   </section>
 
   <dialog id="how" aria-labelledby="how-t">
@@ -408,12 +383,9 @@ const invite='✨ ¡Hola! Te invito a bailar DANZAS CIRCULARES ✨\n'+
  '▶️ Mira el video, el mapa para llegar y todos los detalles aquí:\n'+
  'https://isaacijh-star.github.io/danzas-circulares/?invitacion\n\n'+
  '♫ ¡Te esperamos! ♫';
-document.getElementById('msgPreview').textContent=invite;
-const toast=document.getElementById('toast');
 
 // Botón "Invita tus amigas (os)": un toque abre WhatsApp con la invitación lista; se eligen las amigas y se envía.
-// Si el teléfono permite compartir archivos desde esta página, además adjunta la imagen.
-const waImg=document.getElementById('waImg'), MINI='miniatura.jpg';
+const waImg=document.getElementById('waImg');
 const waWeb='https://api.whatsapp.com/send?text='+encodeURIComponent(invite);
 const inFrame=(()=>{try{return window.top!==window;}catch(e){return true;}})();
 if(/Android/i.test(navigator.userAgent)&&!inFrame){
@@ -426,38 +398,6 @@ if(/Android/i.test(navigator.userAgent)&&!inFrame){
 }
 // El enlace del texto muestra la miniatura como vista previa en WhatsApp:
 // llega UNA burbuja con la imagen arriba y el texto abajo.
-// Guía paso a paso (computador o celular que no permite compartir archivos)
-const gToast=document.getElementById('guideToast'), gImg=document.getElementById('guideImg');
-gImg.src=MINI;
-function pngBlob(){
-  return new Promise((res,rej)=>{
-    const c=document.createElement('canvas'); c.width=gImg.naturalWidth||1280; c.height=gImg.naturalHeight||720;
-    c.getContext('2d').drawImage(gImg,0,0,c.width,c.height);
-    c.toBlob(b=>b?res(b):rej(new Error('sin imagen')),'image/png');
-  });
-}
-document.getElementById('copyImg').addEventListener('click',()=>{
-  if(!(navigator.clipboard&&window.ClipboardItem)){gToast.textContent='Haz clic derecho sobre la imagen y elige "Copiar imagen".';return;}
-  navigator.clipboard.write([new ClipboardItem({'image/png':pngBlob()})])
-    .then(()=>gToast.textContent='Imagen copiada. Ve al chat de WhatsApp y presiona Ctrl + V.')
-    .catch(()=>gToast.textContent='No se pudo copiar. Haz clic derecho sobre la imagen y elige "Copiar imagen".');
-});
-document.getElementById('copyTxt').addEventListener('click',()=>{
-  const ok=()=>gToast.textContent='Texto copiado. Pégalo en "Añade un comentario" y toca Enviar.';
-  const fb=()=>{const t=document.createElement('textarea');t.value=invite;document.body.appendChild(t);t.select();
-    try{document.execCommand('copy');ok();}catch(e){gToast.textContent='Copia el texto desde "Ver el mensaje que se enviará".';}t.remove();};
-  if(navigator.clipboard){navigator.clipboard.writeText(invite).then(ok).catch(fb);}else fb();
-});
-
-document.getElementById('copy').addEventListener('click',()=>{
-  const done=()=>toast.textContent='Invitación copiada. Pégala en tu chat o en tus redes.';
-  if(navigator.clipboard){navigator.clipboard.writeText(invite).then(done).catch(fallback);}else fallback();
-  function fallback(){
-    const t=document.createElement('textarea');t.value=invite;document.body.appendChild(t);t.select();
-    try{document.execCommand('copy');done();}catch(e){toast.textContent='Selecciona y copia el texto de la invitación.';}
-    t.remove();
-  }
-});
 </script>
 
 </body>
