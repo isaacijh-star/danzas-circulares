@@ -114,7 +114,12 @@ details[open] .plus{transform:rotate(45deg)}
 .count span{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
 .info{display:flex;flex-direction:column;gap:8px;font-size:18px}
 .info p b{font-weight:800}
-.chip{display:inline-block;background:var(--night);color:var(--sun);font-weight:800;border-radius:999px;padding:6px 14px;font-size:15px;letter-spacing:.06em}
+.chip{display:inline-block;background:var(--night);color:var(--sun);font-weight:800;border-radius:999px;padding:12px 28px;font-size:22px;letter-spacing:.06em}
+.chip-row{text-align:center;margin-top:6px}
+.hosts{margin-top:6px;background:#24103a12;border:2px solid #24103a33;border-radius:18px;padding:14px 16px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.hosts-label{font-size:15px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.hosts-names{font-family:var(--display);font-weight:800;font-size:clamp(26px,7vw,32px);line-height:1.15}
+@media (max-width:360px){.chip{font-size:19px;padding:10px 20px}}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
 .actions .btn{flex:1 1 200px}
 .ticket .btn.ghost{color:var(--night);box-shadow:inset 0 0 0 2px var(--night)}
@@ -235,8 +240,11 @@ dialog .btn.ghost{color:var(--ink)}
       <p><b>Club de Adulto Mayor Araucaria</b></p>
       <p id="addr">Casablanca 3741, Villa Los Jardines de Vespucio, Peñalolén</p>
       <p>Metro Estación Quilín</p>
-      <p>Focalizan: <b>Tere Parra y Ely Chirino</b></p>
-      <p><span class="chip">APORTE VOLUNTARIO</span></p>
+      <div class="hosts">
+        <span class="hosts-label">Focalizan</span>
+        <span class="hosts-names">Tere Parra y Ely Chirino</span>
+      </div>
+      <p class="chip-row"><span class="chip">APORTE VOLUNTARIO</span></p>
     </div>
     <div class="actions">
       <a class="btn wa" id="waImg" href="https://api.whatsapp.com/send" target="_blank" rel="noopener">Invita tus amigas (os)</a>
