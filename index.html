@@ -8,14 +8,15 @@
 <meta property="og:title" content="¡Te invitamos a las Danzas Circulares!">
 <meta property="og:description" content="Martes 13 de octubre, 18:00 h · Club de Adulto Mayor Araucaria, Peñalolén · Aporte voluntario">
 <meta property="og:url" content="https://isaacijh-star.github.io/danzas-circulares/">
-<meta property="og:image" content="https://isaacijh-star.github.io/danzas-circulares/miniatura.jpg">
-<meta property="og:image:secure_url" content="https://isaacijh-star.github.io/danzas-circulares/miniatura.jpg">
+<meta property="og:image" content="https://isaacijh-star.github.io/danzas-circulares/og.jpg">
+<meta property="og:image:secure_url" content="https://isaacijh-star.github.io/danzas-circulares/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1280">
-<meta property="og:image:height" content="720">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Danzas Circulares, martes 13 de octubre a las 18:00 h">
 <meta property="og:locale" content="es_CL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://isaacijh-star.github.io/danzas-circulares/miniatura.jpg">
+<meta name="twitter:image" content="https://isaacijh-star.github.io/danzas-circulares/og.jpg">
 <title>Danzas Circulares Araucaria</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito:wght@500;700;800&display=swap">
@@ -161,7 +162,7 @@ dialog .btn.ghost{color:var(--ink)}
     <h1>Danzas<span>Circulares</span></h1>
     <p class="lead">Tómate de la mano, entra a la ronda y descubre lo bien que se siente bailar en comunidad.</p>
     <div class="player">
-      <video id="vid" src="video.mp4" autoplay loop playsinline preload="metadata"></video>
+      <video id="vid" src="video.mp4" autoplay loop playsinline preload="auto"></video>
       <button class="sound" id="sound" type="button">🔇 Silenciar</button>
       <p class="mute-note" id="muteNote" hidden>Toca el video para volver a escuchar la música</p>
     </div>
@@ -330,8 +331,9 @@ if('IntersectionObserver' in window){
 }
 document.addEventListener('visibilitychange',syncPlay);
 snd.addEventListener('click',()=>{
-  if(waitingTouch){soundOn();return;} // todavía no sonaba: este toque la enciende
-  userMuted=true; vid.muted=true;      // silenciar
+  const sonando = !vid.muted && !vid.paused;
+  if(!sonando){soundOn();return;}      // todavía no se escucha: este toque enciende la música
+  userMuted=true; vid.muted=true;      // ya se escuchaba: silenciar
   snd.hidden=true; muteNote.hidden=false;
 });
 // Con la música silenciada, tocar el video la vuelve a encender
@@ -404,7 +406,7 @@ const invite='✨ ¡Hola! Te invito a bailar DANZAS CIRCULARES ✨\n'+
  '(a pasos del Metro Quilín)\n\n'+
  '✅ Aporte voluntario.\n\n'+
  '▶️ Mira el video, el mapa para llegar y todos los detalles aquí:\n'+
- 'https://isaacijh-star.github.io/danzas-circulares/\n\n'+
+ 'https://isaacijh-star.github.io/danzas-circulares/?invitacion\n\n'+
  '♫ ¡Te esperamos! ♫';
 document.getElementById('msgPreview').textContent=invite;
 const toast=document.getElementById('toast');
