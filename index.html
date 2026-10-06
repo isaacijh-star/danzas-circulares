@@ -68,6 +68,9 @@ p{margin:0}
 #ring{transform-origin:170px 170px;animation:spin 40s linear infinite}
 .fast #ring{animation-duration:6s}
 @keyframes spin{to{transform:rotate(360deg)}}
+.counter{display:flex;flex-direction:column;align-items:center;gap:0;background:#ffc23d1f;border:2px solid #ffc23d66;border-radius:18px;padding:10px 22px}
+.counter-num{font-family:var(--display);font-weight:800;font-size:44px;line-height:1.05;color:var(--sun);font-variant-numeric:tabular-nums}
+.counter-txt{font-weight:800;font-size:17px}
 .you-msg{min-height:1.5em;font-weight:800;color:var(--sun);font-size:19px}
 .btn{border:0;border-radius:999px;font:800 18px var(--body);padding:14px 24px;cursor:pointer;text-decoration:none;
   display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px}
@@ -184,6 +187,10 @@ dialog .btn.ghost{color:var(--ink)}
       <g id="ring"></g>
     </svg>
     <p class="you-msg" id="youMsg" aria-live="polite"></p>
+    <div class="counter" id="counter" hidden>
+      <span class="counter-num" id="counterNum">0</span>
+      <span class="counter-txt" id="counterTxt">personas ya se sumaron a la ronda</span>
+    </div>
     <button class="btn sun" id="join" type="button">Me sumo a la ronda</button>
   </section>
 
@@ -349,15 +356,32 @@ function draw(){
 }
 draw();
 const join=document.getElementById('join'), ronda=document.getElementById('ronda'), msg=document.getElementById('youMsg');
+// Contador de personas que tocaron "Me sumo a la ronda" (compartido entre todos los que abren el afiche).
+// Cada teléfono suma una sola vez; sirve para estimar cuántas personas podrían asistir.
+const COUNTER='https://abacus.jasoncameron.dev', CKEY='danzas-circulares-araucaria/ronda-13oct', JKEY='dc_me_sume_13oct';
+const counterBox=document.getElementById('counter'), counterNum=document.getElementById('counterNum'), counterTxt=document.getElementById('counterTxt');
+function showCount(n){
+  if(typeof n!=='number')return;
+  counterNum.textContent=n;
+  counterTxt.textContent=n===1?'persona ya se sumó a la ronda':'personas ya se sumaron a la ronda';
+  counterBox.hidden=false;
+}
+fetch(COUNTER+'/get/'+CKEY).then(r=>r.json()).then(d=>showCount(d.value)).catch(()=>{});
+const yaSumado=()=>{try{return localStorage.getItem(JKEY)==='1';}catch(e){return false;}};
+function marcarSumado(){
+  joined=true; draw();
+  join.textContent='¡Ya estás en la ronda! ✓';
+  msg.textContent='¡Bienvenida, bienvenido! La ronda ya te está esperando 💛';
+}
+if(yaSumado())marcarSumado();
 join.addEventListener('click',()=>{
-  joined=!joined; draw();
-  if(joined){
-    msg.textContent='¡Bienvenida, bienvenido! La ronda ya te está esperando 💛';
-    join.textContent='Salir de la ronda';
-    ronda.classList.add('fast'); setTimeout(()=>ronda.classList.remove('fast'),2200);
-  }else{msg.textContent='';join.textContent='Me sumo a la ronda';}
+  ronda.classList.add('fast'); setTimeout(()=>ronda.classList.remove('fast'),2200);
+  if(yaSumado())return; // este teléfono ya se sumó: no se cuenta dos veces
+  try{localStorage.setItem(JKEY,'1');}catch(e){}
+  marcarSumado();
+  fetch(COUNTER+'/hit/'+CKEY).then(r=>r.json()).then(d=>showCount(d.value))
+    .catch(()=>{const n=parseInt(counterNum.textContent,10);if(!isNaN(n))showCount(n+1);});
 });
-
 // Cuenta regresiva (hora de Chile)
 const target=new Date('2026-10-13T18:00:00-03:00').getTime();
 const pad=n=>String(n).padStart(2,'0');
