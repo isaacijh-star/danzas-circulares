@@ -159,7 +159,7 @@ dialog .btn.ghost{color:var(--ink)}
 
 @media (prefers-reduced-motion:reduce){#ring{animation:none}.plus{transition:none}}
 </style>
-<script>(function(){var V="20261006051258";fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){t=t&&t.trim();if(t&&t!==V&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}).catch(function(){})})();</script>
+<script>(function(){var V="20261006053401";fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){t=t&&t.trim();if(t&&t!==V&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}).catch(function(){})})();</script>
 </head>
 <body>
 
@@ -192,7 +192,7 @@ dialog .btn.ghost{color:var(--ink)}
       <span class="counter-num" id="counterNum">0</span>
       <span class="counter-txt" id="counterTxt">personas ya se sumaron a la ronda</span>
     </div>
-    <button class="btn sun" id="join" type="button">Me sumo a la ronda</button>
+    <button class="btn sun" id="join" type="button">Me sumo a la RONDA</button>
   </section>
 
   <section class="benefits" aria-labelledby="ben-t">
@@ -371,7 +371,7 @@ fetch(COUNTER+'/get/'+CKEY).then(r=>r.json()).then(d=>showCount(d.value)).catch(
 const yaSumado=()=>{try{return localStorage.getItem(JKEY)==='1';}catch(e){return false;}};
 function marcarSumado(){
   joined=true; draw();
-  join.textContent='¡Ya estás en la ronda! ✓';
+  join.textContent='¡Ya estás en la RONDA! ✓';
   msg.textContent='¡Bienvenida, bienvenido! La ronda ya te está esperando 💛';
 }
 if(yaSumado())marcarSumado();
